@@ -214,11 +214,40 @@
             line-height: 1.8;
         }
 
+        .instructions ul {
+            margin-left: 20px;
+            color: #666;
+            line-height: 1.6;
+        }
+
         .instructions code {
             background: #f5f5f5;
             padding: 2px 6px;
             border-radius: 4px;
             font-family: monospace;
+        }
+
+        .test-section {
+            margin-top: 15px;
+            padding: 15px;
+            background: #e8f5e9;
+            border-radius: 8px;
+            border-left: 4px solid #4caf50;
+        }
+
+        .test-btn {
+            background: #4caf50;
+            color: white;
+            padding: 8px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+
+        .test-btn:hover {
+            background: #45a049;
         }
     </style>
 </head>
@@ -233,7 +262,10 @@
             <h2>⚙️ Configuração do Google Sheets</h2>
             <div class="input-group">
                 <label for="sheetId">ID da Planilha Google Sheets:</label>
-                <input type="text" id="sheetId" placeholder="Ex: 1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms">
+                <input type="text" id="sheetId" placeholder="Cole a URL completa ou apenas o ID">
+                <small style="color: #888; display: block; margin-top: 5px;">
+                    💡 Pode colar a URL completa! Ex: https://docs.google.com/spreadsheets/d/SEU_ID_AQUI/edit
+                </small>
             </div>
             <div class="input-group">
                 <label for="apiKey">API Key do Google:</label>
@@ -241,6 +273,7 @@
             </div>
             <button class="btn" onclick="loadSites()">Carregar Sites</button>
             <button class="btn btn-secondary" onclick="saveConfig()">Salvar Configuração</button>
+            <button class="test-btn" onclick="testarConexao()">🔍 Testar Conexão</button>
 
             <div class="instructions">
                 <h3>📋 Como configurar:</h3>
@@ -254,8 +287,13 @@
                             <li>Clique em "Concluído"</li>
                         </ul>
                     </li>
-                    <li><strong>Obtenha o ID da planilha:</strong> copie da URL entre <code>/d/</code> e <code>/edit</code><br>
-                        Exemplo: docs.google.com/spreadsheets/d/<code style="color: #e65100;">1BxiMVs0XRA5nFMd...</code>/edit</li>
+                    <li><strong>Obtenha o ID da planilha:</strong><br>
+                        <strong>Opção 1 (mais fácil):</strong> Cole a URL completa da planilha no campo acima<br>
+                        <strong>Opção 2:</strong> Copie apenas o ID da URL entre <code>/d/</code> e <code>/edit</code><br>
+                        <div style="margin-top: 8px; padding: 8px; background: #f5f5f5; border-radius: 4px; font-family: monospace; font-size: 0.85em;">
+                            https://docs.google.com/spreadsheets/d/<span style="background: yellow; padding: 2px;">1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms</span>/edit
+                        </div>
+                    </li>
                     <li><strong>Configure a API Key:</strong>
                         <ul style="margin-top: 8px;">
                             <li>Acesse <a href="https://console.cloud.google.com/" target="_blank">Google Cloud Console</a></li>
@@ -304,14 +342,93 @@
             showStatus('Configuração salva com sucesso!', 'success');
         }
 
+        async function testarConexao() {
+            let sheetId = document.getElementById('sheetId').value;
+            const apiKey = document.getElementById('apiKey').value;
+
+            if (!sheetId || !apiKey) {
+                showStatus('❌ Preencha o ID da planilha e a API Key primeiro.', 'error');
+                return;
+            }
+
+            // Limpa e valida o ID
+            sheetId = limparSheetId(sheetId);
+            document.getElementById('sheetId').value = sheetId;
+
+            if (!sheetId || sheetId.length < 20) {
+                showStatus('❌ ID da planilha muito curto ou inválido. Deve ter pelo menos 20 caracteres.', 'error');
+                return;
+            }
+
+            showStatus('🔄 Testando conexão...', 'loading');
+
+            try {
+                const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}?key=${apiKey}`;
+                const response = await fetch(url);
+                
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => null);
+                    let errorMessage = '❌ Falha no teste: ';
+                    
+                    if (response.status === 403) {
+                        errorMessage += 'API Key inválida ou Google Sheets API não ativada.';
+                    } else if (response.status === 404) {
+                        errorMessage += 'Planilha não encontrada. Verifique se está pública e se o ID está correto.';
+                    } else if (response.status === 400) {
+                        errorMessage += 'ID da planilha em formato inválido.';
+                    } else {
+                        errorMessage += `Erro ${response.status}`;
+                        if (errorData?.error?.message) {
+                            errorMessage += `: ${errorData.error.message}`;
+                        }
+                    }
+                    
+                    showStatus(errorMessage, 'error');
+                    return;
+                }
+
+                const data = await response.json();
+                showStatus(`✅ Conexão OK! Planilha: "${data.properties.title}"`, 'success');
+            } catch (error) {
+                showStatus(`❌ Erro de rede: ${error.message}`, 'error');
+            }
+        }
+
+        function limparSheetId(id) {
+            // Remove espaços
+            id = id.trim();
+            
+            // Se for uma URL completa, extrai o ID
+            if (id.includes('docs.google.com')) {
+                const match = id.match(/\/d\/([a-zA-Z0-9-_]+)/);
+                if (match) {
+                    return match[1];
+                }
+            }
+            
+            // Remove caracteres inválidos
+            id = id.replace(/[^a-zA-Z0-9-_]/g, '');
+            
+            return id;
+        }
+
         async function loadSites() {
-            const sheetId = document.getElementById('sheetId').value;
+            let sheetId = document.getElementById('sheetId').value;
             const apiKey = document.getElementById('apiKey').value;
             const statusDiv = document.getElementById('status');
             const container = document.getElementById('sitesContainer');
 
             if (!sheetId || !apiKey) {
                 showStatus('Por favor, preencha o ID da planilha e a API Key.', 'error');
+                return;
+            }
+
+            // Limpa e valida o ID
+            sheetId = limparSheetId(sheetId);
+            document.getElementById('sheetId').value = sheetId;
+
+            if (!sheetId || sheetId.length < 20) {
+                showStatus('❌ ID da planilha inválido. Deve ter pelo menos 20 caracteres.', 'error');
                 return;
             }
 
