@@ -165,6 +165,13 @@
             margin-top: 10px;
         }
 
+        .site-extra {
+            color: #888;
+            font-size: 0.85em;
+            margin-top: 8px;
+            padding-left: 5px;
+        }
+
         .loading {
             text-align: center;
             padding: 40px;
@@ -238,13 +245,34 @@
             <div class="instructions">
                 <h3>📋 Como configurar:</h3>
                 <ol>
-                    <li>Crie uma planilha no Google Sheets com as colunas: <code>Nome</code>, <code>URL</code>, <code>Categoria</code></li>
-                    <li>Acesse <a href="https://console.cloud.google.com/" target="_blank">Google Cloud Console</a></li>
-                    <li>Crie um projeto e ative a API do Google Sheets</li>
-                    <li>Gere uma API Key em "Credenciais"</li>
-                    <li>Torne sua planilha pública ou compartilhe com "Qualquer pessoa com o link"</li>
-                    <li>Copie o ID da planilha da URL (parte entre /d/ e /edit)</li>
+                    <li><strong>Crie a planilha</strong> no Google Sheets com as colunas: <code>Nome</code>, <code>URL</code>, <code>Categoria</code>, <code>Extra1</code>, <code>Extra2</code></li>
+                    <li><strong>Torne a planilha PÚBLICA:</strong>
+                        <ul style="margin-top: 8px;">
+                            <li>Clique em "Compartilhar" (canto superior direito)</li>
+                            <li>Em "Acesso geral", selecione "Qualquer pessoa com o link"</li>
+                            <li>Permissão: "Leitor"</li>
+                            <li>Clique em "Concluído"</li>
+                        </ul>
+                    </li>
+                    <li><strong>Obtenha o ID da planilha:</strong> copie da URL entre <code>/d/</code> e <code>/edit</code><br>
+                        Exemplo: docs.google.com/spreadsheets/d/<code style="color: #e65100;">1BxiMVs0XRA5nFMd...</code>/edit</li>
+                    <li><strong>Configure a API Key:</strong>
+                        <ul style="margin-top: 8px;">
+                            <li>Acesse <a href="https://console.cloud.google.com/" target="_blank">Google Cloud Console</a></li>
+                            <li>Crie um novo projeto ou selecione existente</li>
+                            <li>Vá em "APIs e Serviços" → "Biblioteca"</li>
+                            <li>Procure e ative "Google Sheets API"</li>
+                            <li>Vá em "Credenciais" → "Criar credenciais" → "Chave de API"</li>
+                            <li><strong>IMPORTANTE:</strong> Restrinja a API Key para usar apenas "Google Sheets API"</li>
+                        </ul>
+                    </li>
                 </ol>
+                <div style="margin-top: 15px; padding: 10px; background: #e3f2fd; border-radius: 5px;">
+                    <strong>⚠️ Problemas comuns:</strong><br>
+                    • Erro 403: API Key inválida ou Google Sheets API não ativada<br>
+                    • Erro 404: Planilha não está pública ou ID incorreto<br>
+                    • Erro 400: Formato do ID está errado
+                </div>
             </div>
         </div>
 
@@ -291,11 +319,27 @@
             container.innerHTML = '';
 
             try {
-                const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/A:C?key=${apiKey}`;
+                const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/A:E?key=${apiKey}`;
                 const response = await fetch(url);
                 
                 if (!response.ok) {
-                    throw new Error('Erro ao acessar a planilha. Verifique as configurações.');
+                    const errorData = await response.json().catch(() => null);
+                    let errorMessage = 'Erro ao acessar a planilha. ';
+                    
+                    if (response.status === 403) {
+                        errorMessage += 'API Key inválida ou sem permissão para Google Sheets API.';
+                    } else if (response.status === 404) {
+                        errorMessage += 'Planilha não encontrada ou não está pública.';
+                    } else if (response.status === 400) {
+                        errorMessage += 'ID da planilha inválido ou range incorreto.';
+                    } else {
+                        errorMessage += `Status: ${response.status}`;
+                        if (errorData && errorData.error) {
+                            errorMessage += ` - ${errorData.error.message}`;
+                        }
+                    }
+                    
+                    throw new Error(errorMessage);
                 }
 
                 const data = await response.json();
@@ -310,9 +354,9 @@
                 
                 // Pula a primeira linha (cabeçalho)
                 for (let i = 1; i < rows.length; i++) {
-                    const [nome, url, categoria] = rows[i];
+                    const [nome, url, categoria, extra1, extra2] = rows[i];
                     if (nome && url) {
-                        createSiteCard(nome, url, categoria || 'Geral');
+                        createSiteCard(nome, url, categoria || 'Geral', extra1, extra2);
                     }
                 }
 
@@ -322,7 +366,7 @@
             }
         }
 
-        function createSiteCard(nome, url, categoria) {
+        function createSiteCard(nome, url, categoria, extra1, extra2) {
             const container = document.getElementById('sitesContainer');
             const card = document.createElement('div');
             card.className = 'site-card';
@@ -330,11 +374,16 @@
 
             const inicial = nome.charAt(0).toUpperCase();
             
+            let extraInfo = '';
+            if (extra1) extraInfo += `<div class="site-extra">📌 ${extra1}</div>`;
+            if (extra2) extraInfo += `<div class="site-extra">🔖 ${extra2}</div>`;
+            
             card.innerHTML = `
                 <div class="site-icon">${inicial}</div>
                 <div class="site-name">${nome}</div>
                 <div class="site-url">${url}</div>
                 <span class="site-category">${categoria}</span>
+                ${extraInfo}
             `;
 
             container.appendChild(card);
