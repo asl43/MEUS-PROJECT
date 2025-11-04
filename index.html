@@ -81,6 +81,13 @@
             border-color: #667eea;
         }
 
+        small {
+            color: #888;
+            display: block;
+            margin-top: 5px;
+            font-size: 0.9em;
+        }
+
         .btn {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
@@ -92,6 +99,7 @@
             cursor: pointer;
             transition: transform 0.2s, box-shadow 0.2s;
             margin-right: 10px;
+            margin-bottom: 10px;
         }
 
         .btn:hover {
@@ -105,6 +113,10 @@
 
         .btn-secondary {
             background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .test-btn {
+            background: #4caf50;
         }
 
         .sites-grid {
@@ -225,29 +237,7 @@
             padding: 2px 6px;
             border-radius: 4px;
             font-family: monospace;
-        }
-
-        .test-section {
-            margin-top: 15px;
-            padding: 15px;
-            background: #e8f5e9;
-            border-radius: 8px;
-            border-left: 4px solid #4caf50;
-        }
-
-        .test-btn {
-            background: #4caf50;
-            color: white;
-            padding: 8px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 0.9em;
-            margin-top: 10px;
-        }
-
-        .test-btn:hover {
-            background: #45a049;
+            word-break: break-all;
         }
     </style>
 </head>
@@ -259,57 +249,43 @@
         </div>
 
         <div class="config-section">
-            <h2>⚙️ Configuração do Google Sheets</h2>
+            <h2>⚙️ Configuração do Google Apps Script</h2>
             <div class="input-group">
-                <label for="sheetId">ID da Planilha Google Sheets:</label>
-                <input type="text" id="sheetId" placeholder="Cole a URL completa ou apenas o ID">
-                <small style="color: #888; display: block; margin-top: 5px;">
-                    💡 Pode colar a URL completa! Ex: https://docs.google.com/spreadsheets/d/SEU_ID_AQUI/edit
-                </small>
+                <label for="webAppUrl">URL da Web App (Apps Script):</label>
+                <input type="text" id="webAppUrl" placeholder="https://script.google.com/macros/s/...../exec">
+                <small>💡 Cole a URL completa da sua Web App implantada</small>
             </div>
-            <div class="input-group">
-                <label for="apiKey">API Key do Google:</label>
-                <input type="text" id="apiKey" placeholder="Sua Google API Key">
-            </div>
-            <button class="btn" onclick="loadSites()">Carregar Sites</button>
-            <button class="btn btn-secondary" onclick="saveConfig()">Salvar Configuração</button>
-            <button class="test-btn" onclick="testarConexao()">🔍 Testar Conexão</button>
+
+            <button class="btn" onclick="loadSites()">📥 Carregar Sites</button>
+            <button class="btn btn-secondary" onclick="saveConfig()">💾 Salvar Configuração</button>
+            <button class="btn test-btn" onclick="testarConexao()">🔍 Testar Conexão</button>
 
             <div class="instructions">
                 <h3>📋 Como configurar:</h3>
                 <ol>
-                    <li><strong>Crie a planilha</strong> no Google Sheets com as colunas: <code>Nome</code>, <code>URL</code>, <code>Categoria</code>, <code>Extra1</code>, <code>Extra2</code></li>
-                    <li><strong>Torne a planilha PÚBLICA:</strong>
+                    <li><strong>Prepare sua planilha:</strong>
                         <ul style="margin-top: 8px;">
-                            <li>Clique em "Compartilhar" (canto superior direito)</li>
-                            <li>Em "Acesso geral", selecione "Qualquer pessoa com o link"</li>
-                            <li>Permissão: "Leitor"</li>
-                            <li>Clique em "Concluído"</li>
+                            <li>Abra sua planilha no Google Sheets</li>
+                            <li>Vá em <strong>Extensões → Apps Script</strong></li>
+                            <li>Cole o código do Apps Script fornecido</li>
+                            <li>Execute a função <code>inicializarPlanilha()</code></li>
                         </ul>
                     </li>
-                    <li><strong>Obtenha o ID da planilha:</strong><br>
-                        <strong>Opção 1 (mais fácil):</strong> Cole a URL completa da planilha no campo acima<br>
-                        <strong>Opção 2:</strong> Copie apenas o ID da URL entre <code>/d/</code> e <code>/edit</code><br>
-                        <div style="margin-top: 8px; padding: 8px; background: #f5f5f5; border-radius: 4px; font-family: monospace; font-size: 0.85em;">
-                            https://docs.google.com/spreadsheets/d/<span style="background: yellow; padding: 2px;">1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms</span>/edit
-                        </div>
-                    </li>
-                    <li><strong>Configure a API Key:</strong>
+                    <li><strong>Implante a Web App:</strong>
                         <ul style="margin-top: 8px;">
-                            <li>Acesse <a href="https://console.cloud.google.com/" target="_blank">Google Cloud Console</a></li>
-                            <li>Crie um novo projeto ou selecione existente</li>
-                            <li>Vá em "APIs e Serviços" → "Biblioteca"</li>
-                            <li>Procure e ative "Google Sheets API"</li>
-                            <li>Vá em "Credenciais" → "Criar credenciais" → "Chave de API"</li>
-                            <li><strong>IMPORTANTE:</strong> Restrinja a API Key para usar apenas "Google Sheets API"</li>
+                            <li>No Apps Script, clique em <strong>Implantar → Nova implantação</strong></li>
+                            <li>Tipo: <strong>Aplicativo da Web</strong></li>
+                            <li>Executar como: <strong>Eu</strong></li>
+                            <li>Quem tem acesso: <strong>Qualquer pessoa</strong></li>
+                            <li>Clique em <strong>Implantar</strong></li>
+                            <li>Copie a <strong>URL da Web App</strong></li>
                         </ul>
                     </li>
+                    <li><strong>Cole a URL acima</strong> e clique em "Testar Conexão"</li>
                 </ol>
                 <div style="margin-top: 15px; padding: 10px; background: #e3f2fd; border-radius: 5px;">
-                    <strong>⚠️ Problemas comuns:</strong><br>
-                    • Erro 403: API Key inválida ou Google Sheets API não ativada<br>
-                    • Erro 404: Planilha não está pública ou ID incorreto<br>
-                    • Erro 400: Formato do ID está errado
+                    <strong>✅ Sua URL deve ser algo como:</strong><br>
+                    <code>https://script.google.com/macros/s/AKfycbwL0Lk.../exec</code>
                 </div>
             </div>
         </div>
@@ -321,114 +297,68 @@
     <script>
         // Carregar configuração salva
         window.onload = function() {
-            const savedSheetId = localStorage.getItem('sheetId');
-            const savedApiKey = localStorage.getItem('apiKey');
+            const savedUrl = localStorage.getItem('webAppUrl');
             
-            if (savedSheetId) document.getElementById('sheetId').value = savedSheetId;
-            if (savedApiKey) document.getElementById('apiKey').value = savedApiKey;
-            
-            if (savedSheetId && savedApiKey) {
+            if (savedUrl) {
+                document.getElementById('webAppUrl').value = savedUrl;
                 loadSites();
             }
         };
 
         function saveConfig() {
-            const sheetId = document.getElementById('sheetId').value;
-            const apiKey = document.getElementById('apiKey').value;
+            const webAppUrl = document.getElementById('webAppUrl').value.trim();
             
-            localStorage.setItem('sheetId', sheetId);
-            localStorage.setItem('apiKey', apiKey);
+            if (!webAppUrl) {
+                showStatus('❌ Por favor, informe a URL da Web App.', 'error');
+                return;
+            }
             
-            showStatus('Configuração salva com sucesso!', 'success');
+            localStorage.setItem('webAppUrl', webAppUrl);
+            showStatus('✅ Configuração salva com sucesso!', 'success');
         }
 
         async function testarConexao() {
-            let sheetId = document.getElementById('sheetId').value;
-            const apiKey = document.getElementById('apiKey').value;
+            const webAppUrl = document.getElementById('webAppUrl').value.trim();
 
-            if (!sheetId || !apiKey) {
-                showStatus('❌ Preencha o ID da planilha e a API Key primeiro.', 'error');
+            if (!webAppUrl) {
+                showStatus('❌ Por favor, informe a URL da Web App.', 'error');
                 return;
             }
 
-            // Limpa e valida o ID
-            sheetId = limparSheetId(sheetId);
-            document.getElementById('sheetId').value = sheetId;
-
-            if (!sheetId || sheetId.length < 20) {
-                showStatus('❌ ID da planilha muito curto ou inválido. Deve ter pelo menos 20 caracteres.', 'error');
+            if (!webAppUrl.includes('script.google.com') || !webAppUrl.includes('/exec')) {
+                showStatus('❌ URL inválida. Deve ser uma URL do Google Apps Script terminando com /exec', 'error');
                 return;
             }
 
             showStatus('🔄 Testando conexão...', 'loading');
 
             try {
-                const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}?key=${apiKey}`;
+                const url = `${webAppUrl}?acao=stats`;
                 const response = await fetch(url);
                 
                 if (!response.ok) {
-                    const errorData = await response.json().catch(() => null);
-                    let errorMessage = '❌ Falha no teste: ';
-                    
-                    if (response.status === 403) {
-                        errorMessage += 'API Key inválida ou Google Sheets API não ativada.';
-                    } else if (response.status === 404) {
-                        errorMessage += 'Planilha não encontrada. Verifique se está pública e se o ID está correto.';
-                    } else if (response.status === 400) {
-                        errorMessage += 'ID da planilha em formato inválido.';
-                    } else {
-                        errorMessage += `Erro ${response.status}`;
-                        if (errorData?.error?.message) {
-                            errorMessage += `: ${errorData.error.message}`;
-                        }
-                    }
-                    
-                    showStatus(errorMessage, 'error');
-                    return;
+                    throw new Error(`Erro HTTP: ${response.status}`);
                 }
 
                 const data = await response.json();
-                showStatus(`✅ Conexão OK! Planilha: "${data.properties.title}"`, 'success');
-            } catch (error) {
-                showStatus(`❌ Erro de rede: ${error.message}`, 'error');
-            }
-        }
-
-        function limparSheetId(id) {
-            // Remove espaços
-            id = id.trim();
-            
-            // Se for uma URL completa, extrai o ID
-            if (id.includes('docs.google.com')) {
-                const match = id.match(/\/d\/([a-zA-Z0-9-_]+)/);
-                if (match) {
-                    return match[1];
+                
+                if (data.total !== undefined) {
+                    showStatus(`✅ Conexão OK! Total de sites: ${data.total}`, 'success');
+                } else {
+                    showStatus('⚠️ Conexão estabelecida, mas resposta inesperada. Verifique o código do Apps Script.', 'error');
                 }
+            } catch (error) {
+                showStatus(`❌ Erro ao conectar: ${error.message}. Verifique se a Web App foi implantada corretamente.`, 'error');
             }
-            
-            // Remove caracteres inválidos
-            id = id.replace(/[^a-zA-Z0-9-_]/g, '');
-            
-            return id;
         }
 
         async function loadSites() {
-            let sheetId = document.getElementById('sheetId').value;
-            const apiKey = document.getElementById('apiKey').value;
+            const webAppUrl = document.getElementById('webAppUrl').value.trim();
             const statusDiv = document.getElementById('status');
             const container = document.getElementById('sitesContainer');
 
-            if (!sheetId || !apiKey) {
-                showStatus('Por favor, preencha o ID da planilha e a API Key.', 'error');
-                return;
-            }
-
-            // Limpa e valida o ID
-            sheetId = limparSheetId(sheetId);
-            document.getElementById('sheetId').value = sheetId;
-
-            if (!sheetId || sheetId.length < 20) {
-                showStatus('❌ ID da planilha inválido. Deve ter pelo menos 20 caracteres.', 'error');
+            if (!webAppUrl) {
+                showStatus('❌ Por favor, configure a URL da Web App primeiro.', 'error');
                 return;
             }
 
@@ -436,50 +366,42 @@
             container.innerHTML = '';
 
             try {
-                const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/A:E?key=${apiKey}`;
+                const url = `${webAppUrl}?acao=listar`;
                 const response = await fetch(url);
                 
                 if (!response.ok) {
-                    const errorData = await response.json().catch(() => null);
-                    let errorMessage = 'Erro ao acessar a planilha. ';
-                    
-                    if (response.status === 403) {
-                        errorMessage += 'API Key inválida ou sem permissão para Google Sheets API.';
-                    } else if (response.status === 404) {
-                        errorMessage += 'Planilha não encontrada ou não está pública.';
-                    } else if (response.status === 400) {
-                        errorMessage += 'ID da planilha inválido ou range incorreto.';
-                    } else {
-                        errorMessage += `Status: ${response.status}`;
-                        if (errorData && errorData.error) {
-                            errorMessage += ` - ${errorData.error.message}`;
-                        }
-                    }
-                    
-                    throw new Error(errorMessage);
+                    throw new Error(`Erro HTTP: ${response.status}`);
                 }
 
                 const data = await response.json();
-                const rows = data.values;
 
-                if (!rows || rows.length < 2) {
-                    showStatus('Nenhum site encontrado na planilha.', 'error');
+                if (!data.success) {
+                    showStatus(`❌ ${data.message}`, 'error');
+                    return;
+                }
+
+                if (!data.sites || data.sites.length === 0) {
+                    showStatus('ℹ️ Nenhum site encontrado. Adicione sites na sua planilha!', 'error');
                     return;
                 }
 
                 statusDiv.innerHTML = '';
                 
-                // Pula a primeira linha (cabeçalho)
-                for (let i = 1; i < rows.length; i++) {
-                    const [nome, url, categoria, extra1, extra2] = rows[i];
-                    if (nome && url) {
-                        createSiteCard(nome, url, categoria || 'Geral', extra1, extra2);
+                data.sites.forEach(site => {
+                    if (site.nome && site.url) {
+                        createSiteCard(
+                            site.nome, 
+                            site.url, 
+                            site.categoria || 'Geral',
+                            site.extra1,
+                            site.extra2
+                        );
                     }
-                }
+                });
 
-                showStatus(`✅ ${rows.length - 1} sites carregados com sucesso!`, 'success');
+                showStatus(`✅ ${data.sites.length} sites carregados com sucesso!`, 'success');
             } catch (error) {
-                showStatus(`❌ Erro: ${error.message}`, 'error');
+                showStatus(`❌ Erro ao carregar sites: ${error.message}`, 'error');
             }
         }
 
@@ -511,7 +433,7 @@
             statusDiv.innerHTML = `<div class="${type}">${message}</div>`;
             
             if (type === 'success') {
-                setTimeout(() => statusDiv.innerHTML = '', 3000);
+                setTimeout(() => statusDiv.innerHTML = '', 5000);
             }
         }
     </script>
