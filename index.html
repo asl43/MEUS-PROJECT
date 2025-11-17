@@ -3,8 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meus Sites</title>
+    <title>🌐 Meus Sites Avançado</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
+        :root {
+            /* Cores para Modo Claro */
+            --bg-body-light: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --bg-card-light: rgba(255, 255, 255, 0.95);
+            --bg-header-light: rgba(255, 255, 255, 0.95);
+            --color-primary-light: #667eea;
+            --color-secondary-light: #764ba2;
+            --color-text-light: #333;
+            --color-subtitle-light: #666;
+            --color-input-border-light: #e0e0e0;
+            --color-input-focus-light: #667eea;
+            --color-category-bg-light: #f0f0f0;
+            --color-category-text-light: #666;
+            --color-extra-text-light: #888;
+            --shadow-light: 0 10px 40px rgba(0, 0, 0, 0.2);
+            --shadow-card-light: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Cores para Modo Escuro */
+        .dark-mode {
+            --bg-body-light: linear-gradient(135deg, #1f2a40 0%, #2f3e5c 100%);
+            --bg-card-light: rgba(40, 50, 70, 0.95);
+            --bg-header-light: rgba(40, 50, 70, 0.95);
+            --color-primary-light: #8e9eeb;
+            --color-secondary-light: #a46de5;
+            --color-text-light: #f4f4f4;
+            --color-subtitle-light: #bbb;
+            --color-input-border-light: #444;
+            --color-input-focus-light: #8e9eeb;
+            --color-category-bg-light: #3a475e;
+            --color-category-text-light: #ddd;
+            --color-extra-text-light: #aaa;
+            --shadow-light: 0 10px 40px rgba(0, 0, 0, 0.5);
+            --shadow-card-light: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -13,9 +50,11 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--bg-body-light);
             min-height: 100vh;
             padding: 20px;
+            color: var(--color-text-light);
+            transition: background 0.5s, color 0.5s;
         }
 
         .container {
@@ -23,83 +62,136 @@
             margin: 0 auto;
         }
 
-        .header {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 30px;
+        .header, .config-section {
+            background: var(--bg-header-light);
             border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            box-shadow: var(--shadow-light);
             margin-bottom: 30px;
+            transition: background 0.5s, box-shadow 0.5s;
+        }
+
+        .header {
+            padding: 30px;
         }
 
         h1 {
-            color: #667eea;
+            color: var(--color-primary-light);
             font-size: 2.5em;
             margin-bottom: 10px;
+            transition: color 0.5s;
         }
 
         .subtitle {
-            color: #666;
+            color: var(--color-subtitle-light);
             font-size: 1.1em;
+            transition: color 0.5s;
         }
 
         .config-section {
-            background: rgba(255, 255, 255, 0.95);
             padding: 25px;
             border-radius: 15px;
+            box-shadow: var(--shadow-card-light);
             margin-bottom: 20px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
         }
 
         .config-section h2 {
-            color: #764ba2;
+            color: var(--color-secondary-light);
             margin-bottom: 15px;
             font-size: 1.3em;
+            transition: color 0.5s;
+        }
+        
+        /* Estilização para a barra de pesquisa e filtros */
+        .controls-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 25px;
+            align-items: center;
         }
 
+        .search-input {
+            flex-grow: 1;
+            max-width: 400px;
+        }
+
+        .search-input input, .filter-select {
+            padding: 12px;
+            border: 2px solid var(--color-input-border-light);
+            border-radius: 8px;
+            font-size: 1em;
+            background-color: var(--bg-card-light);
+            color: var(--color-text-light);
+            transition: border-color 0.3s, background-color 0.5s, color 0.5s;
+            width: 100%;
+        }
+
+        .search-input input:focus, .filter-select:focus {
+            outline: none;
+            border-color: var(--color-primary-light);
+        }
+
+        .filter-select {
+            appearance: none; /* Remove a seta padrão */
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%23667eea'%3e%3cpath d='M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 0.7em top 50%, 0 0;
+            background-size: 0.65em auto, 100%;
+            cursor: pointer;
+        }
+        
+        /* Botões de Ação e Configuração */
         .input-group {
             margin-bottom: 15px;
         }
 
         label {
             display: block;
-            color: #555;
+            color: var(--color-subtitle-light);
             font-weight: 600;
             margin-bottom: 5px;
+            transition: color 0.5s;
         }
 
         input[type="text"] {
             width: 100%;
             padding: 12px;
-            border: 2px solid #e0e0e0;
+            border: 2px solid var(--color-input-border-light);
             border-radius: 8px;
             font-size: 1em;
             transition: border-color 0.3s;
+            background-color: var(--bg-card-light);
+            color: var(--color-text-light);
         }
 
         input[type="text"]:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: var(--color-primary-light);
         }
 
         small {
-            color: #888;
+            color: var(--color-extra-text-light);
             display: block;
             margin-top: 5px;
             font-size: 0.9em;
+            transition: color 0.5s;
         }
 
         .btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, var(--color-primary-light) 0%, var(--color-secondary-light) 100%);
             color: white;
-            padding: 12px 30px;
+            padding: 12px 25px;
             border: none;
             border-radius: 8px;
             font-size: 1em;
             font-weight: 600;
             cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: transform 0.2s, box-shadow 0.2s, opacity 0.3s;
             margin-right: 10px;
             margin-bottom: 10px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .btn:hover {
@@ -116,23 +208,87 @@
         }
 
         .test-btn {
-            background: #4caf50;
+            background: linear-gradient(135deg, #4caf50 0%, #388e3c 100%);
         }
 
+        /* Toggle de Modo Escuro e Visualização */
+        .toggle-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .toggle-btn {
+            background-color: var(--color-input-border-light);
+            color: var(--color-subtitle-light);
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .toggle-btn.active {
+            background: linear-gradient(135deg, var(--color-primary-light) 0%, var(--color-secondary-light) 100%);
+            color: white;
+        }
+        
+        /* Grid de Sites - Padrão: Cards */
         .sites-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 20px;
             margin-top: 20px;
+            transition: all 0.5s;
+        }
+        
+        /* Modo Lista */
+        .sites-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
 
+        .sites-list .site-card {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+        }
+        
+        .sites-list .site-icon {
+            margin-bottom: 0;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+
+        .sites-list .site-info {
+            flex-grow: 1;
+        }
+
+        .sites-list .site-name {
+            font-size: 1.1em;
+            margin-bottom: 0;
+        }
+
+        .sites-list .site-url {
+            font-size: 0.8em;
+        }
+        
+        .sites-list .site-category, .sites-list .site-extra, .sites-list .favorite-toggle {
+            margin-top: 0;
+            margin-left: 15px;
+            flex-shrink: 0;
+        }
+        
         .site-card {
-            background: rgba(255, 255, 255, 0.95);
+            background: var(--bg-card-light);
             padding: 25px;
             border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: var(--shadow-card-light);
+            transition: transform 0.3s, box-shadow 0.3s, background 0.5s;
             cursor: pointer;
+            position: relative;
+            display: flex;
+            flex-direction: column;
         }
 
         .site-card:hover {
@@ -143,7 +299,7 @@
         .site-icon {
             width: 50px;
             height: 50px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, var(--color-primary-light) 0%, var(--color-secondary-light) 100%);
             border-radius: 12px;
             display: flex;
             align-items: center;
@@ -152,42 +308,91 @@
             font-size: 1.5em;
             font-weight: bold;
             margin-bottom: 15px;
+            flex-shrink: 0; /* Para o modo Lista */
         }
 
         .site-name {
             font-size: 1.3em;
             font-weight: 600;
-            color: #333;
+            color: var(--color-text-light);
             margin-bottom: 8px;
+            transition: color 0.5s;
         }
 
         .site-url {
-            color: #667eea;
+            color: var(--color-primary-light);
             font-size: 0.9em;
             word-break: break-all;
+            transition: color 0.5s;
         }
 
         .site-category {
             display: inline-block;
-            background: #f0f0f0;
+            background: var(--color-category-bg-light);
             padding: 4px 12px;
             border-radius: 15px;
             font-size: 0.85em;
-            color: #666;
+            color: var(--color-category-text-light);
             margin-top: 10px;
+            transition: background 0.5s, color 0.5s;
+        }
+        
+        .site-category.Favorite {
+             background: #ffc107;
+             color: #333;
+             font-weight: bold;
         }
 
         .site-extra {
-            color: #888;
+            color: var(--color-extra-text-light);
             font-size: 0.85em;
             margin-top: 8px;
             padding-left: 5px;
+            transition: color 0.5s;
+        }
+        
+        /* Botão de Favorito no Card */
+        .favorite-toggle {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.5em;
+            color: var(--color-input-border-light);
+            cursor: pointer;
+            z-index: 10;
+            transition: color 0.3s;
         }
 
+        .favorite-toggle.is-favorite {
+            color: #ffc107; /* Amarelo/Dourado */
+        }
+        
+        .site-card:hover .favorite-toggle {
+             color: var(--color-primary-light); /* Aparece no hover */
+        }
+        
+        .favorite-toggle.is-favorite:hover {
+            color: #ffa000;
+        }
+        
+        /* Badge Mais Acessado */
+        .access-badge {
+            background-color: #f5576c;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 5px;
+            font-size: 0.7em;
+            font-weight: bold;
+            margin-left: 10px;
+            vertical-align: middle;
+            display: inline-block;
+        }
+
+        /* Mensagens de Status */
         .loading {
             text-align: center;
             padding: 40px;
-            color: white;
+            color: var(--color-text-light);
             font-size: 1.2em;
         }
 
@@ -198,6 +403,11 @@
             border-radius: 8px;
             margin-top: 15px;
         }
+        
+        .dark-mode .error {
+            background: #4a1414;
+            color: #ff8a80;
+        }
 
         .success {
             background: #e8f5e9;
@@ -206,7 +416,13 @@
             border-radius: 8px;
             margin-top: 15px;
         }
+        
+        .dark-mode .success {
+            background: #1b5e20;
+            color: #a5d6a7;
+        }
 
+        /* Instruções */
         .instructions {
             background: #fff3e0;
             padding: 20px;
@@ -214,22 +430,29 @@
             margin-top: 15px;
             border-left: 4px solid #ff9800;
         }
+        
+        .dark-mode .instructions {
+            background: #4e342e;
+            border-left: 4px solid #ffab40;
+        }
 
         .instructions h3 {
             color: #e65100;
             margin-bottom: 10px;
         }
+        
+        .dark-mode .instructions h3 {
+            color: #ffab40;
+        }
 
-        .instructions ol {
+        .instructions ol, .instructions ul {
             margin-left: 20px;
             color: #555;
             line-height: 1.8;
         }
-
-        .instructions ul {
-            margin-left: 20px;
-            color: #666;
-            line-height: 1.6;
+        
+        .dark-mode .instructions ol, .dark-mode .instructions ul {
+            color: #ddd;
         }
 
         .instructions code {
@@ -239,13 +462,67 @@
             font-family: monospace;
             word-break: break-all;
         }
+        
+        .dark-mode .instructions code {
+            background: #3a475e;
+            color: #f4f4f4;
+        }
+        
+        .instructions .note {
+            background: #e3f2fd;
+            border-radius: 5px;
+        }
+
+        .dark-mode .instructions .note {
+            background: #2a3e5c;
+            color: #c5e1a5;
+        }
+        
+        /* Responsividade */
+        @media (max-width: 600px) {
+            .header {
+                padding: 20px;
+            }
+            .config-section {
+                padding: 15px;
+            }
+            h1 {
+                font-size: 2em;
+            }
+            .sites-grid {
+                grid-template-columns: 1fr;
+            }
+            .btn {
+                width: 100%;
+                margin-right: 0;
+            }
+            .controls-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
     </style>
 </head>
-<body>
+<body class="light-mode">
     <div class="container">
         <div class="header">
             <h1>🌐 Meus Sites</h1>
             <p class="subtitle">Acesse rapidamente todos os seus sites favoritos</p>
+            
+            <div style="margin-top: 15px; display: flex; gap: 10px;">
+                <div class="toggle-btn" id="modeToggle">
+                    <i class="fas fa-moon"></i> Modo Escuro
+                </div>
+                
+                <div class="toggle-group">
+                    <div class="toggle-btn active" id="viewCards" onclick="changeView('cards')">
+                        <i class="fas fa-th-large"></i> Cards
+                    </div>
+                    <div class="toggle-btn" id="viewList" onclick="changeView('list')">
+                        <i class="fas fa-list"></i> Lista
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="config-section">
@@ -256,19 +533,25 @@
                 <small>💡 Cole a URL completa da sua Web App implantada</small>
             </div>
 
-            <button class="btn" onclick="loadSites()">📥 Carregar Sites</button>
-            <button class="btn btn-secondary" onclick="saveConfig()">💾 Salvar Configuração</button>
-            <button class="btn test-btn" onclick="testarConexao()">🔍 Testar Conexão</button>
-
+            <button class="btn" onclick="loadSites()">
+                <i class="fas fa-download"></i> Carregar Sites
+            </button>
+            <button class="btn btn-secondary" onclick="saveConfig()">
+                <i class="fas fa-save"></i> Salvar Configuração
+            </button>
+            <button class="btn test-btn" onclick="testarConexao()">
+                <i class="fas fa-search"></i> Testar Conexão
+            </button>
+            
             <div class="instructions">
-                <h3>📋 Como configurar:</h3>
+                <h3>📋 Instruções de Configuração (Apps Script):</h3>
                 <ol>
                     <li><strong>Prepare sua planilha:</strong>
                         <ul style="margin-top: 8px;">
                             <li>Abra sua planilha no Google Sheets</li>
                             <li>Vá em <strong>Extensões → Apps Script</strong></li>
-                            <li>Cole o código do Apps Script fornecido</li>
-                            <li>Execute a função <code>inicializarPlanilha()</code></li>
+                            <li>Cole o código do Apps Script fornecido (funções <code>doGet(e)</code>, <code>listarSites()</code>, <code>inicializarPlanilha()</code>)</li>
+                            <li>Execute a função <code>inicializarPlanilha()</code> (isso cria as colunas esperadas: **Nome, URL, Categoria, Extra1, Extra2**)</li>
                         </ul>
                     </li>
                     <li><strong>Implante a Web App:</strong>
@@ -283,75 +566,119 @@
                     </li>
                     <li><strong>Cole a URL acima</strong> e clique em "Testar Conexão"</li>
                 </ol>
-                <div style="margin-top: 15px; padding: 10px; background: #e3f2fd; border-radius: 5px;">
-                    <strong>✅ Sua URL deve ser algo como:</strong><br>
+                <div style="margin-top: 15px; padding: 10px;" class="note">
+                    <strong>✅ Exemplo de URL:</strong><br>
                     <code>https://script.google.com/macros/s/AKfycbwL0Lk.../exec</code>
                 </div>
             </div>
         </div>
 
         <div id="status"></div>
-        <div id="sitesContainer" class="sites-grid"></div>
+        
+        <div class="controls-bar">
+            <div class="search-input">
+                <input type="text" id="searchInput" placeholder="🔍 Buscar por nome ou URL..." onkeyup="filterSites()">
+            </div>
+            
+            <select id="categoryFilter" class="filter-select" onchange="filterSites()">
+                <option value="">🏷️ Todas as Categorias</option>
+                </select>
+            
+            <select id="sortOrder" class="filter-select" onchange="filterSites()">
+                <option value="name_asc">A-Z (Nome)</option>
+                <option value="name_desc">Z-A (Nome)</option>
+                <option value="clicks_desc">🔥 Mais Acessados</option>
+                <option value="category_asc">Categoria</option>
+            </select>
+            
+            <div class="toggle-btn" id="favoriteFilter" onclick="toggleFavoriteFilter()">
+                <i class="far fa-star"></i> Meus Favoritos
+            </div>
+        </div>
+
+        <div id="sitesContainer" class="sites-grid">
+            <div class="loading">Por favor, insira a URL do Apps Script e clique em 'Carregar Sites'.</div>
+        </div>
     </div>
 
     <script>
-        // Carregar configuração salva
+        let allSites = [];
+        let isFavoriteFilterActive = false;
+        let currentView = localStorage.getItem('siteView') || 'cards'; // 'cards' ou 'list'
+
+        // Funções de Inicialização e Configuração
         window.onload = function() {
+            initDarkMode();
             const savedUrl = localStorage.getItem('webAppUrl');
-            
             if (savedUrl) {
                 document.getElementById('webAppUrl').value = savedUrl;
                 loadSites();
             }
+            changeView(currentView);
         };
 
         function saveConfig() {
             const webAppUrl = document.getElementById('webAppUrl').value.trim();
-            
             if (!webAppUrl) {
                 showStatus('❌ Por favor, informe a URL da Web App.', 'error');
                 return;
             }
-            
             localStorage.setItem('webAppUrl', webAppUrl);
             showStatus('✅ Configuração salva com sucesso!', 'success');
         }
 
-        async function testarConexao() {
-            const webAppUrl = document.getElementById('webAppUrl').value.trim();
+        // Função de Modo Escuro/Claro
+        function initDarkMode() {
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            let currentMode = localStorage.getItem('theme') || (prefersDark ? 'dark' : 'light');
 
-            if (!webAppUrl) {
-                showStatus('❌ Por favor, informe a URL da Web App.', 'error');
-                return;
+            if (currentMode === 'dark') {
+                document.body.classList.add('dark-mode');
+                document.getElementById('modeToggle').innerHTML = '<i class="fas fa-sun"></i> Modo Claro';
             }
-
-            if (!webAppUrl.includes('script.google.com') || !webAppUrl.includes('/exec')) {
-                showStatus('❌ URL inválida. Deve ser uma URL do Google Apps Script terminando com /exec', 'error');
-                return;
-            }
-
-            showStatus('🔄 Testando conexão...', 'loading');
-
-            try {
-                const url = `${webAppUrl}?acao=stats`;
-                const response = await fetch(url);
-                
-                if (!response.ok) {
-                    throw new Error(`Erro HTTP: ${response.status}`);
-                }
-
-                const data = await response.json();
-                
-                if (data.total !== undefined) {
-                    showStatus(`✅ Conexão OK! Total de sites: ${data.total}`, 'success');
-                } else {
-                    showStatus('⚠️ Conexão estabelecida, mas resposta inesperada. Verifique o código do Apps Script.', 'error');
-                }
-            } catch (error) {
-                showStatus(`❌ Erro ao conectar: ${error.message}. Verifique se a Web App foi implantada corretamente.`, 'error');
-            }
+            
+            document.getElementById('modeToggle').onclick = toggleDarkMode;
         }
 
+        function toggleDarkMode() {
+            const body = document.body;
+            const toggle = document.getElementById('modeToggle');
+            
+            if (body.classList.contains('dark-mode')) {
+                body.classList.remove('dark-mode');
+                localStorage.setItem('theme', 'light');
+                toggle.innerHTML = '<i class="fas fa-moon"></i> Modo Escuro';
+            } else {
+                body.classList.add('dark-mode');
+                localStorage.setItem('theme', 'dark');
+                toggle.innerHTML = '<i class="fas fa-sun"></i> Modo Claro';
+            }
+        }
+        
+        // Função para Testar Conexão (inalterada)
+        async function testarConexao() {
+             const webAppUrl = document.getElementById('webAppUrl').value.trim();
+             if (!webAppUrl || !webAppUrl.includes('script.google.com') || !webAppUrl.includes('/exec')) {
+                 showStatus('❌ URL inválida. Deve ser uma URL do Google Apps Script terminando com /exec', 'error');
+                 return;
+             }
+             showStatus('🔄 Testando conexão...', 'loading');
+             try {
+                 const url = `${webAppUrl}?acao=stats`;
+                 const response = await fetch(url);
+                 if (!response.ok) throw new Error(`Erro HTTP: ${response.status}`);
+                 const data = await response.json();
+                 if (data.total !== undefined) {
+                     showStatus(`✅ Conexão OK! Total de sites: ${data.total}`, 'success');
+                 } else {
+                     showStatus('⚠️ Conexão estabelecida, mas resposta inesperada. Verifique o código do Apps Script.', 'error');
+                 }
+             } catch (error) {
+                 showStatus(`❌ Erro ao conectar: ${error.message}. Verifique se a Web App foi implantada corretamente.`, 'error');
+             }
+         }
+
+        // Função para Carregar Sites (Modificada)
         async function loadSites() {
             const webAppUrl = document.getElementById('webAppUrl').value.trim();
             const statusDiv = document.getElementById('status');
@@ -359,6 +686,7 @@
 
             if (!webAppUrl) {
                 showStatus('❌ Por favor, configure a URL da Web App primeiro.', 'error');
+                container.innerHTML = '';
                 return;
             }
 
@@ -368,11 +696,7 @@
             try {
                 const url = `${webAppUrl}?acao=listar`;
                 const response = await fetch(url);
-                
-                if (!response.ok) {
-                    throw new Error(`Erro HTTP: ${response.status}`);
-                }
-
+                if (!response.ok) throw new Error(`Erro HTTP: ${response.status}`);
                 const data = await response.json();
 
                 if (!data.success) {
@@ -385,45 +709,183 @@
                     return;
                 }
 
-                statusDiv.innerHTML = '';
+                allSites = data.sites.map(site => ({
+                    ...site,
+                    // Garante que 'clicks' seja um número, ou 0 se não estiver no localStorage
+                    clicks: parseInt(localStorage.getItem(`clicks_${site.url}`) || '0'),
+                    isFavorite: localStorage.getItem(`favorite_${site.url}`) === 'true',
+                    category: site.categoria || 'Geral' // Normaliza a categoria
+                }));
                 
-                data.sites.forEach(site => {
-                    if (site.nome && site.url) {
-                        createSiteCard(
-                            site.nome, 
-                            site.url, 
-                            site.categoria || 'Geral',
-                            site.extra1,
-                            site.extra2
-                        );
-                    }
-                });
-
-                showStatus(`✅ ${data.sites.length} sites carregados com sucesso!`, 'success');
+                showStatus(`✅ ${allSites.length} sites carregados com sucesso!`, 'success');
+                
+                populateCategoryFilter();
+                filterSites(); // Renderiza os sites após o carregamento
             } catch (error) {
                 showStatus(`❌ Erro ao carregar sites: ${error.message}`, 'error');
             }
         }
+        
+        // Funções de Favoritos e Cliques
+        function toggleFavorite(event, url) {
+            event.stopPropagation(); // Previne a navegação para o site
+            const site = allSites.find(s => s.url === url);
+            if (!site) return;
 
-        function createSiteCard(nome, url, categoria, extra1, extra2) {
+            site.isFavorite = !site.isFavorite;
+            localStorage.setItem(`favorite_${url}`, site.isFavorite ? 'true' : 'false');
+            
+            // Re-renderiza para atualizar o estado do ícone e a filtragem
+            filterSites();
+        }
+        
+        function recordClick(url) {
+            const site = allSites.find(s => s.url === url);
+            if (!site) return;
+            
+            site.clicks = (site.clicks || 0) + 1;
+            localStorage.setItem(`clicks_${url}`, site.clicks);
+            
+            // Não re-renderiza para evitar piscar, apenas navega.
+            window.open(url, '_blank');
+        }
+        
+        function toggleFavoriteFilter() {
+            isFavoriteFilterActive = !isFavoriteFilterActive;
+            const filterButton = document.getElementById('favoriteFilter');
+            
+            if (isFavoriteFilterActive) {
+                filterButton.classList.add('active');
+                filterButton.innerHTML = '<i class="fas fa-star"></i> Favoritos Ativos';
+            } else {
+                filterButton.classList.remove('active');
+                filterButton.innerHTML = '<i class="far fa-star"></i> Meus Favoritos';
+            }
+            
+            filterSites();
+        }
+        
+        // Funções de Visualização
+        function changeView(view) {
+            currentView = view;
+            localStorage.setItem('siteView', view);
+            const container = document.getElementById('sitesContainer');
+            const viewCardsBtn = document.getElementById('viewCards');
+            const viewListBtn = document.getElementById('viewList');
+
+            if (view === 'list') {
+                container.classList.remove('sites-grid');
+                container.classList.add('sites-list');
+                viewCardsBtn.classList.remove('active');
+                viewListBtn.classList.add('active');
+            } else {
+                container.classList.remove('sites-list');
+                container.classList.add('sites-grid');
+                viewCardsBtn.classList.add('active');
+                viewListBtn.classList.remove('active');
+            }
+            filterSites(); // Re-renderiza para aplicar a nova classe
+        }
+        
+        // Funções de Busca e Filtro
+        function populateCategoryFilter() {
+            const filterSelect = document.getElementById('categoryFilter');
+            filterSelect.innerHTML = '<option value="">🏷️ Todas as Categorias</option>';
+            
+            const categories = [...new Set(allSites.map(site => site.category))].sort();
+            
+            categories.forEach(category => {
+                const option = document.createElement('option');
+                option.value = category;
+                option.textContent = category;
+                filterSelect.appendChild(option);
+            });
+        }
+
+        function filterSites() {
+            const searchValue = document.getElementById('searchInput').value.toLowerCase();
+            const selectedCategory = document.getElementById('categoryFilter').value;
+            const sortOrder = document.getElementById('sortOrder').value;
+
+            let filteredSites = allSites.filter(site => {
+                const nameMatch = site.nome.toLowerCase().includes(searchValue);
+                const urlMatch = site.url.toLowerCase().includes(searchValue);
+                const categoryMatch = !selectedCategory || site.category === selectedCategory;
+                const favoriteMatch = !isFavoriteFilterActive || site.isFavorite;
+
+                return (nameMatch || urlMatch) && categoryMatch && favoriteMatch;
+            });
+            
+            // Ordenação
+            filteredSites.sort((a, b) => {
+                if (sortOrder === 'name_asc') return a.nome.localeCompare(b.nome);
+                if (sortOrder === 'name_desc') return b.nome.localeCompare(a.nome);
+                if (sortOrder === 'category_asc') return a.category.localeCompare(b.category);
+                if (sortOrder === 'clicks_desc') return b.clicks - a.clicks;
+                return 0;
+            });
+
+            renderSites(filteredSites);
+        }
+
+        function renderSites(sites) {
+            const container = document.getElementById('sitesContainer');
+            container.innerHTML = '';
+            
+            const maxClicks = sites.length > 0 ? Math.max(...sites.map(s => s.clicks || 0)) : 0;
+            const isMostAccessedEnabled = document.getElementById('sortOrder').value === 'clicks_desc';
+            
+            if (sites.length === 0) {
+                 container.innerHTML = '<div class="loading">Nenhum site corresponde aos filtros.</div>';
+                 return;
+            }
+
+            sites.forEach(site => {
+                createSiteCard(site, maxClicks, isMostAccessedEnabled);
+            });
+        }
+
+        function createSiteCard(site, maxClicks, isMostAccessedEnabled) {
             const container = document.getElementById('sitesContainer');
             const card = document.createElement('div');
             card.className = 'site-card';
-            card.onclick = () => window.open(url, '_blank');
+            card.onclick = () => recordClick(site.url); // Chama recordClick no clique
 
-            const inicial = nome.charAt(0).toUpperCase();
+            const inicial = site.nome.charAt(0).toUpperCase();
             
+            // Toggle de Favorito
+            const favClass = site.isFavorite ? 'fas fa-star is-favorite' : 'far fa-star';
+            const favoriteToggle = `<i class="${favClass}" onclick="toggleFavorite(event, '${site.url}')"></i>`;
+            
+            // Badge Mais Acessado
+            const isMostAccessed = site.clicks > 0 && site.clicks === maxClicks && isMostAccessedEnabled;
+            const accessBadge = isMostAccessed ? '<span class="access-badge">🔥 Mais Acessado</span>' : '';
+
             let extraInfo = '';
-            if (extra1) extraInfo += `<div class="site-extra">📌 ${extra1}</div>`;
-            if (extra2) extraInfo += `<div class="site-extra">🔖 ${extra2}</div>`;
+            if (site.extra1) extraInfo += `<div class="site-extra"><i class="fas fa-thumbtack"></i> ${site.extra1}</div>`;
+            if (site.extra2) extraInfo += `<div class="site-extra"><i class="fas fa-tag"></i> ${site.extra2}</div>`;
             
-            card.innerHTML = `
-                <div class="site-icon">${inicial}</div>
-                <div class="site-name">${nome}</div>
-                <div class="site-url">${url}</div>
-                <span class="site-category">${categoria}</span>
-                ${extraInfo}
-            `;
+            // O modo Lista tem uma estrutura interna diferente para alinhamento
+            if (currentView === 'list') {
+                 card.innerHTML = `
+                    <div class="favorite-toggle">${favoriteToggle}</div>
+                    <div class="site-icon">${inicial}</div>
+                    <div class="site-info">
+                        <div class="site-name">${site.nome} ${accessBadge}</div>
+                        <div class="site-url">${site.url}</div>
+                    </div>
+                    <span class="site-category">${site.category}</span>
+                `;
+            } else { // Modo Cards
+                 card.innerHTML = `
+                    <div class="favorite-toggle">${favoriteToggle}</div>
+                    <div class="site-icon">${inicial}</div>
+                    <div class="site-name">${site.nome} ${accessBadge}</div>
+                    <div class="site-url">${site.url}</div>
+                    <span class="site-category">${site.category}</span>
+                    ${extraInfo}
+                `;
+            }
 
             container.appendChild(card);
         }
