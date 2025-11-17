@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🌐 Meus Sites Avançado</title>
+    <title>🌐 Meus Sites Avançado (Apps Script CRUD)</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         :root {
@@ -101,7 +101,6 @@
             transition: color 0.5s;
         }
         
-        /* Estilização para a barra de pesquisa e filtros */
         .controls-bar {
             display: flex;
             flex-wrap: wrap;
@@ -132,7 +131,7 @@
         }
 
         .filter-select {
-            appearance: none; /* Remove a seta padrão */
+            appearance: none;
             background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%23667eea'%3e%3cpath d='M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z'/%3e%3c/svg%3e");
             background-repeat: no-repeat;
             background-position: right 0.7em top 50%, 0 0;
@@ -140,7 +139,6 @@
             cursor: pointer;
         }
         
-        /* Botões de Ação e Configuração */
         .input-group {
             margin-bottom: 15px;
         }
@@ -211,7 +209,6 @@
             background: linear-gradient(135deg, #4caf50 0%, #388e3c 100%);
         }
 
-        /* Toggle de Modo Escuro e Visualização */
         .toggle-group {
             display: flex;
             gap: 10px;
@@ -232,7 +229,6 @@
             color: white;
         }
         
-        /* Grid de Sites - Padrão: Cards */
         .sites-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -241,7 +237,6 @@
             transition: all 0.5s;
         }
         
-        /* Modo Lista */
         .sites-list {
             display: flex;
             flex-direction: column;
@@ -254,7 +249,7 @@
             padding: 15px;
         }
         
-        .sites-list .site-icon {
+        .sites-list .site-icon-wrapper {
             margin-bottom: 0;
             margin-right: 15px;
             flex-shrink: 0;
@@ -295,10 +290,22 @@
             transform: translateY(-5px);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
         }
-
-        .site-icon {
+        
+        /* Estilo para o ícone customizado/favicon */
+        .site-icon-wrapper {
             width: 50px;
             height: 50px;
+            margin-bottom: 15px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .site-icon {
+            /* Estilo de fallback (primeira letra) */
+            width: 100%;
+            height: 100%;
             background: linear-gradient(135deg, var(--color-primary-light) 0%, var(--color-secondary-light) 100%);
             border-radius: 12px;
             display: flex;
@@ -307,8 +314,6 @@
             color: white;
             font-size: 1.5em;
             font-weight: bold;
-            margin-bottom: 15px;
-            flex-shrink: 0; /* Para o modo Lista */
         }
 
         .site-name {
@@ -337,21 +342,6 @@
             transition: background 0.5s, color 0.5s;
         }
         
-        .site-category.Favorite {
-             background: #ffc107;
-             color: #333;
-             font-weight: bold;
-        }
-
-        .site-extra {
-            color: var(--color-extra-text-light);
-            font-size: 0.85em;
-            margin-top: 8px;
-            padding-left: 5px;
-            transition: color 0.5s;
-        }
-        
-        /* Botão de Favorito no Card */
         .favorite-toggle {
             position: absolute;
             top: 15px;
@@ -364,18 +354,17 @@
         }
 
         .favorite-toggle.is-favorite {
-            color: #ffc107; /* Amarelo/Dourado */
+            color: #ffc107;
         }
         
         .site-card:hover .favorite-toggle {
-             color: var(--color-primary-light); /* Aparece no hover */
+             color: var(--color-primary-light);
         }
         
         .favorite-toggle.is-favorite:hover {
             color: #ffa000;
         }
         
-        /* Badge Mais Acessado */
         .access-badge {
             background-color: #f5576c;
             color: white;
@@ -386,14 +375,6 @@
             margin-left: 10px;
             vertical-align: middle;
             display: inline-block;
-        }
-
-        /* Mensagens de Status */
-        .loading {
-            text-align: center;
-            padding: 40px;
-            color: var(--color-text-light);
-            font-size: 1.2em;
         }
 
         .error {
@@ -422,7 +403,6 @@
             color: #a5d6a7;
         }
 
-        /* Instruções */
         .instructions {
             background: #fff3e0;
             padding: 20px;
@@ -435,38 +415,6 @@
             background: #4e342e;
             border-left: 4px solid #ffab40;
         }
-
-        .instructions h3 {
-            color: #e65100;
-            margin-bottom: 10px;
-        }
-        
-        .dark-mode .instructions h3 {
-            color: #ffab40;
-        }
-
-        .instructions ol, .instructions ul {
-            margin-left: 20px;
-            color: #555;
-            line-height: 1.8;
-        }
-        
-        .dark-mode .instructions ol, .dark-mode .instructions ul {
-            color: #ddd;
-        }
-
-        .instructions code {
-            background: #f5f5f5;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-family: monospace;
-            word-break: break-all;
-        }
-        
-        .dark-mode .instructions code {
-            background: #3a475e;
-            color: #f4f4f4;
-        }
         
         .instructions .note {
             background: #e3f2fd;
@@ -476,6 +424,75 @@
         .dark-mode .instructions .note {
             background: #2a3e5c;
             color: #c5e1a5;
+        }
+        
+        /* Estilos do Modal */
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 100; 
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            overflow: auto; 
+            background-color: rgba(0,0,0,0.6); 
+            padding-top: 50px;
+        }
+
+        .modal-content {
+            background-color: var(--bg-card-light);
+            margin: auto;
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%; 
+            max-width: 500px;
+            box-shadow: var(--shadow-light);
+            position: relative;
+            transition: background-color 0.5s;
+        }
+
+        .close-btn {
+            color: var(--color-subtitle-light);
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        .close-btn:hover,
+        .close-btn:focus {
+            color: var(--color-secondary-light);
+            text-decoration: none;
+            cursor: pointer;
+        }
+        
+        .modal-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        
+        /* Botão Flutuante (FAB) */
+        .fab {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            font-size: 24px;
+            background: linear-gradient(135deg, #4caf50 0%, #388e3c 100%);
+            color: white;
+            border: none;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+            cursor: pointer;
+            z-index: 50;
+            transition: transform 0.2s;
+        }
+        
+        .fab:hover {
+            transform: scale(1.1);
         }
         
         /* Responsividade */
@@ -500,6 +517,13 @@
                 flex-direction: column;
                 align-items: stretch;
             }
+            .fab {
+                width: 50px;
+                height: 50px;
+                bottom: 15px;
+                right: 15px;
+                font-size: 20px;
+            }
         }
     </style>
 </head>
@@ -509,7 +533,7 @@
             <h1>🌐 Meus Sites</h1>
             <p class="subtitle">Acesse rapidamente todos os seus sites favoritos</p>
             
-            <div style="margin-top: 15px; display: flex; gap: 10px;">
+            <div style="margin-top: 15px; display: flex; flex-wrap: wrap; gap: 10px;">
                 <div class="toggle-btn" id="modeToggle">
                     <i class="fas fa-moon"></i> Modo Escuro
                 </div>
@@ -546,29 +570,13 @@
             <div class="instructions">
                 <h3>📋 Instruções de Configuração (Apps Script):</h3>
                 <ol>
-                    <li><strong>Prepare sua planilha:</strong>
-                        <ul style="margin-top: 8px;">
-                            <li>Abra sua planilha no Google Sheets</li>
-                            <li>Vá em <strong>Extensões → Apps Script</strong></li>
-                            <li>Cole o código do Apps Script fornecido (funções <code>doGet(e)</code>, <code>listarSites()</code>, <code>inicializarPlanilha()</code>)</li>
-                            <li>Execute a função <code>inicializarPlanilha()</code> (isso cria as colunas esperadas: **Nome, URL, Categoria, Extra1, Extra2**)</li>
-                        </ul>
-                    </li>
-                    <li><strong>Implante a Web App:</strong>
-                        <ul style="margin-top: 8px;">
-                            <li>No Apps Script, clique em <strong>Implantar → Nova implantação</strong></li>
-                            <li>Tipo: <strong>Aplicativo da Web</strong></li>
-                            <li>Executar como: <strong>Eu</strong></li>
-                            <li>Quem tem acesso: <strong>Qualquer pessoa</strong></li>
-                            <li>Clique em <strong>Implantar</strong></li>
-                            <li>Copie a <strong>URL da Web App</strong></li>
-                        </ul>
-                    </li>
-                    <li><strong>Cole a URL acima</strong> e clique em "Testar Conexão"</li>
+                    <li>Certifique-se de que o **código Apps Script mais recente** (com `doGet` e `doPost` para CRUD) esteja colado no seu projeto.</li>
+                    <li>Vá em **Extensões → Apps Script** e execute a função `inicializarPlanilha()` uma vez.</li>
+                    <li>**Reimplante a Web App:** Clique em **Implantar → Gerenciar implantações → Editar** → **Nova versão** → **Implantar**.</li>
+                    <li>Cole a URL acima e use o botão **"Carregar Sites"**.</li>
                 </ol>
                 <div style="margin-top: 15px; padding: 10px;" class="note">
-                    <strong>✅ Exemplo de URL:</strong><br>
-                    <code>https://script.google.com/macros/s/AKfycbwL0Lk.../exec</code>
+                    **Dica:** Use **Ctrl/Cmd + Clique** ou **Clique Direito** em um card para **EDITAR/EXCLUIR** o site.
                 </div>
             </div>
         </div>
@@ -601,12 +609,57 @@
         </div>
     </div>
 
+    <div id="siteModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <h2 id="modalTitle">➕ Adicionar Novo Site</h2>
+            
+            <input type="hidden" id="siteId"> 
+
+            <div class="input-group">
+                <label for="siteNome">Nome do Site:</label>
+                <input type="text" id="siteNome" placeholder="Ex: Google Docs">
+            </div>
+            <div class="input-group">
+                <label for="siteUrl">URL Completa:</label>
+                <input type="text" id="siteUrl" placeholder="Ex: https://docs.google.com/document/">
+            </div>
+            <div class="input-group">
+                <label for="siteCategoria">Categoria:</label>
+                <input type="text" id="siteCategoria" placeholder="Ex: Produtividade">
+            </div>
+            <div class="input-group">
+                <label for="siteExtra1">Detalhe Extra 1 (Ex: Usuário/Tag):</label>
+                <input type="text" id="siteExtra1" placeholder="Informação adicional">
+            </div>
+            <div class="input-group">
+                <label for="siteExtra2">Detalhe Extra 2 (Ex: Senha/Status):</label>
+                <input type="text" id="siteExtra2" placeholder="Mais informações">
+            </div>
+            
+            <div class="modal-actions">
+                <button class="btn test-btn" onclick="handleSave()">
+                    <i class="fas fa-check"></i> Salvar
+                </button>
+                <button class="btn btn-secondary" id="deleteBtn" style="display: none;" onclick="handleDelete()">
+                    <i class="fas fa-trash"></i> Excluir
+                </button>
+            </div>
+            <div id="modalStatus"></div>
+        </div>
+    </div>
+
+    <button class="fab" onclick="openModal('add')">
+        <i class="fas fa-plus"></i>
+    </button>
+
     <script>
         let allSites = [];
         let isFavoriteFilterActive = false;
         let currentView = localStorage.getItem('siteView') || 'cards'; // 'cards' ou 'list'
 
-        // Funções de Inicialização e Configuração
+        // --------------------------- Funções de Inicialização ---------------------------
+
         window.onload = function() {
             initDarkMode();
             const savedUrl = localStorage.getItem('webAppUrl');
@@ -616,7 +669,7 @@
             }
             changeView(currentView);
         };
-
+        
         function saveConfig() {
             const webAppUrl = document.getElementById('webAppUrl').value.trim();
             if (!webAppUrl) {
@@ -626,8 +679,7 @@
             localStorage.setItem('webAppUrl', webAppUrl);
             showStatus('✅ Configuração salva com sucesso!', 'success');
         }
-
-        // Função de Modo Escuro/Claro
+        
         function initDarkMode() {
             const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
             let currentMode = localStorage.getItem('theme') || (prefersDark ? 'dark' : 'light');
@@ -654,8 +706,7 @@
                 toggle.innerHTML = '<i class="fas fa-sun"></i> Modo Claro';
             }
         }
-        
-        // Função para Testar Conexão (inalterada)
+
         async function testarConexao() {
              const webAppUrl = document.getElementById('webAppUrl').value.trim();
              if (!webAppUrl || !webAppUrl.includes('script.google.com') || !webAppUrl.includes('/exec')) {
@@ -678,7 +729,7 @@
              }
          }
 
-        // Função para Carregar Sites (Modificada)
+        // Função para Carregar Sites
         async function loadSites() {
             const webAppUrl = document.getElementById('webAppUrl').value.trim();
             const statusDiv = document.getElementById('status');
@@ -704,17 +755,15 @@
                     return;
                 }
 
-                if (!data.sites || data.sites.length === 0) {
-                    showStatus('ℹ️ Nenhum site encontrado. Adicione sites na sua planilha!', 'error');
-                    return;
-                }
-
+                if (!data.sites) data.sites = [];
+                
                 allSites = data.sites.map(site => ({
                     ...site,
                     // Garante que 'clicks' seja um número, ou 0 se não estiver no localStorage
                     clicks: parseInt(localStorage.getItem(`clicks_${site.url}`) || '0'),
                     isFavorite: localStorage.getItem(`favorite_${site.url}`) === 'true',
-                    category: site.categoria || 'Geral' // Normaliza a categoria
+                    category: site.categoria || 'Geral', // Normaliza a categoria
+                    id: site.id || site.nome // Garante que o ID exista para CRUD
                 }));
                 
                 showStatus(`✅ ${allSites.length} sites carregados com sucesso!`, 'success');
@@ -726,16 +775,155 @@
             }
         }
         
-        // Funções de Favoritos e Cliques
+        // --------------------------- Funções CRUD (Interface) ---------------------------
+        
+        function openModal(mode, site = null) {
+            const modal = document.getElementById('siteModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const deleteBtn = document.getElementById('deleteBtn');
+            const modalStatus = document.getElementById('modalStatus');
+
+            // Limpa campos
+            document.getElementById('siteId').value = '';
+            document.getElementById('siteNome').value = '';
+            document.getElementById('siteUrl').value = '';
+            document.getElementById('siteCategoria').value = '';
+            document.getElementById('siteExtra1').value = '';
+            document.getElementById('siteExtra2').value = '';
+            modalStatus.innerHTML = '';
+
+            if (mode === 'add') {
+                modalTitle.innerHTML = '➕ Adicionar Novo Site';
+                deleteBtn.style.display = 'none';
+            } else if (mode === 'edit' && site) {
+                modalTitle.innerHTML = `✏️ Editar Site: ${site.nome}`;
+                document.getElementById('siteId').value = site.id;
+                document.getElementById('siteNome').value = site.nome;
+                document.getElementById('siteUrl').value = site.url;
+                document.getElementById('siteCategoria').value = site.categoria;
+                document.getElementById('siteExtra1').value = site.extra1;
+                document.getElementById('siteExtra2').value = site.extra2;
+                deleteBtn.style.display = 'inline-block';
+            }
+            
+            modal.style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('siteModal').style.display = 'none';
+        }
+
+        // Fecha modal ao clicar fora dele
+        window.onclick = function(event) {
+            if (event.target == document.getElementById('siteModal')) {
+                closeModal();
+            }
+        }
+
+        async function sendDataToScript(acao, data) {
+            const webAppUrl = document.getElementById('webAppUrl').value.trim();
+            const modalStatus = document.getElementById('modalStatus');
+            
+            if (!webAppUrl) {
+                modalStatus.innerHTML = '<div class="error">❌ URL do Apps Script não configurada.</div>';
+                return { success: false, message: 'URL não configurada' };
+            }
+
+            modalStatus.innerHTML = '<div class="loading">🔄 Processando...</div>';
+
+            try {
+                const response = await fetch(webAppUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        acao: acao,
+                        data: data
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`Erro HTTP: ${response.status}`);
+                }
+                
+                const result = await response.json();
+                return result;
+            } catch (error) {
+                modalStatus.innerHTML = `<div class="error">❌ Erro de conexão/script: ${error.message}</div>`;
+                return { success: false, message: 'Erro de conexão/script' };
+            }
+        }
+
+        async function handleSave() {
+            const id = document.getElementById('siteId').value;
+            const nome = document.getElementById('siteNome').value.trim();
+            const url = document.getElementById('siteUrl').value.trim();
+            const categoria = document.getElementById('siteCategoria').value.trim();
+            const extra1 = document.getElementById('siteExtra1').value.trim();
+            const extra2 = document.getElementById('siteExtra2').value.trim();
+            const modalStatus = document.getElementById('modalStatus');
+            
+            if (!nome || !url) {
+                modalStatus.innerHTML = '<div class="error">❌ Nome e URL são obrigatórios.</div>';
+                return;
+            }
+            
+            const siteData = {
+                id: id ? parseInt(id) : null,
+                nome,
+                url,
+                categoria,
+                extra1,
+                extra2
+            };
+
+            const acao = id ? 'editar' : 'adicionar';
+            const result = await sendDataToScript(acao, siteData);
+
+            if (result.success) {
+                modalStatus.innerHTML = `<div class="success">✅ ${result.message}</div>`;
+                // Recarrega a lista para mostrar a alteração
+                setTimeout(() => {
+                    closeModal();
+                    loadSites();
+                }, 1500);
+            } else {
+                modalStatus.innerHTML = `<div class="error">❌ Falha: ${result.message}</div>`;
+            }
+        }
+
+        async function handleDelete() {
+            const id = document.getElementById('siteId').value;
+            const nome = document.getElementById('siteNome').value;
+            const modalStatus = document.getElementById('modalStatus');
+            
+            if (!confirm(`Tem certeza que deseja excluir o site "${nome}"? Esta ação não pode ser desfeita.`)) return;
+
+            const result = await sendDataToScript('excluir', { id: parseInt(id) });
+            
+            if (result.success) {
+                modalStatus.innerHTML = `<div class="success">✅ ${result.message}</div>`;
+                // Recarrega a lista para mostrar a alteração
+                setTimeout(() => {
+                    closeModal();
+                    loadSites();
+                }, 1500);
+            } else {
+                modalStatus.innerHTML = `<div class="error">❌ Falha: ${result.message}</div>`;
+            }
+        }
+        
+        // --------------------------- Funções de Interatividade e Renderização ---------------------------
+        
         function toggleFavorite(event, url) {
-            event.stopPropagation(); // Previne a navegação para o site
+            event.stopPropagation(); // Previne a navegação para o site/edição
             const site = allSites.find(s => s.url === url);
             if (!site) return;
 
             site.isFavorite = !site.isFavorite;
             localStorage.setItem(`favorite_${url}`, site.isFavorite ? 'true' : 'false');
             
-            // Re-renderiza para atualizar o estado do ícone e a filtragem
             filterSites();
         }
         
@@ -746,7 +934,6 @@
             site.clicks = (site.clicks || 0) + 1;
             localStorage.setItem(`clicks_${url}`, site.clicks);
             
-            // Não re-renderiza para evitar piscar, apenas navega.
             window.open(url, '_blank');
         }
         
@@ -765,7 +952,6 @@
             filterSites();
         }
         
-        // Funções de Visualização
         function changeView(view) {
             currentView = view;
             localStorage.setItem('siteView', view);
@@ -784,10 +970,9 @@
                 viewCardsBtn.classList.add('active');
                 viewListBtn.classList.remove('active');
             }
-            filterSites(); // Re-renderiza para aplicar a nova classe
+            filterSites(); 
         }
         
-        // Funções de Busca e Filtro
         function populateCategoryFilter() {
             const filterSelect = document.getElementById('categoryFilter');
             filterSelect.innerHTML = '<option value="">🏷️ Todas as Categorias</option>';
@@ -849,9 +1034,35 @@
             const container = document.getElementById('sitesContainer');
             const card = document.createElement('div');
             card.className = 'site-card';
-            card.onclick = () => recordClick(site.url); // Chama recordClick no clique
+            
+            // Lógica de clique: abrir modal com Ctrl/Cmd/Alt+Click ou Clique Direito; caso contrário, abre o link
+            card.onclick = (e) => {
+                // Abre o modal de edição se CtrlKey, MetaKey (Cmd no Mac) ou AltKey estiverem pressionadas
+                if (e.ctrlKey || e.metaKey || e.altKey) {
+                    e.preventDefault();
+                    openModal('edit', site);
+                } else {
+                    recordClick(site.url); // Comportamento padrão: abrir o link
+                }
+            };
+            card.oncontextmenu = (e) => {
+                 e.preventDefault(); // Impede o menu de contexto padrão
+                 openModal('edit', site);
+            }
 
-            const inicial = site.nome.charAt(0).toUpperCase();
+            // Uso do Favicon (Melhoria de Ícones Personalizados)
+            const faviconUrl = `https://s2.googleusercontent.com/s2/favicons?domain=${site.url}&sz=48`;
+            const fallbackInitial = site.nome.charAt(0).toUpperCase();
+            
+            // O atributo onerror garante que se o favicon falhar, ele usa o fallback da primeira letra
+            const siteIconHtml = `
+                <img 
+                    src="${faviconUrl}" 
+                    alt="Icone" 
+                    style="width: 100%; height: 100%; border-radius: 12px; object-fit: cover; background: white;" 
+                    onerror="this.outerHTML='<div class=\\'site-icon\\'>${fallbackInitial}</div>'"
+                >
+            `;
             
             // Toggle de Favorito
             const favClass = site.isFavorite ? 'fas fa-star is-favorite' : 'far fa-star';
@@ -869,7 +1080,7 @@
             if (currentView === 'list') {
                  card.innerHTML = `
                     <div class="favorite-toggle">${favoriteToggle}</div>
-                    <div class="site-icon">${inicial}</div>
+                    <div class="site-icon-wrapper">${siteIconHtml}</div>
                     <div class="site-info">
                         <div class="site-name">${site.nome} ${accessBadge}</div>
                         <div class="site-url">${site.url}</div>
@@ -879,7 +1090,7 @@
             } else { // Modo Cards
                  card.innerHTML = `
                     <div class="favorite-toggle">${favoriteToggle}</div>
-                    <div class="site-icon">${inicial}</div>
+                    <div class="site-icon-wrapper">${siteIconHtml}</div>
                     <div class="site-name">${site.nome} ${accessBadge}</div>
                     <div class="site-url">${site.url}</div>
                     <span class="site-category">${site.category}</span>
