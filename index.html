@@ -342,6 +342,38 @@
             transition: background 0.5s, color 0.5s;
         }
         
+        .site-extra {
+            font-size: 0.85em;
+            color: var(--color-extra-text-light);
+            margin-top: 5px;
+            transition: color 0.5s;
+        }
+        
+        .site-links {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .site-link-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 10px;
+            background: var(--color-category-bg-light);
+            color: var(--color-category-text-light);
+            border-radius: 6px;
+            font-size: 0.75em;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .site-link-btn:hover {
+            background: var(--color-primary-light);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
         .favorite-toggle {
             position: absolute;
             top: 15px;
@@ -446,7 +478,9 @@
             padding: 30px;
             border-radius: 15px;
             width: 90%; 
-            max-width: 500px;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
             box-shadow: var(--shadow-light);
             position: relative;
             transition: background-color 0.5s;
@@ -637,6 +671,18 @@
                 <input type="text" id="siteExtra2" placeholder="Mais informações">
             </div>
             
+            <div class="input-group">
+                <label for="siteLinkPlanilha"><i class="fas fa-table"></i> Link da Planilha:</label>
+                <input type="text" id="siteLinkPlanilha" placeholder="https://docs.google.com/spreadsheets/d/...">
+                <small>Link direto para a planilha relacionada (opcional)</small>
+            </div>
+            
+            <div class="input-group">
+                <label for="siteLinkAppsScript"><i class="fas fa-code"></i> Link do Apps Script:</label>
+                <input type="text" id="siteLinkAppsScript" placeholder="https://script.google.com/home/projects/...">
+                <small>Link direto para o projeto Apps Script (opcional)</small>
+            </div>
+            
             <div class="modal-actions">
                 <button class="btn test-btn" onclick="handleSave()">
                     <i class="fas fa-check"></i> Salvar
@@ -763,7 +809,9 @@
                     clicks: parseInt(localStorage.getItem(`clicks_${site.url}`) || '0'),
                     isFavorite: localStorage.getItem(`favorite_${site.url}`) === 'true',
                     category: site.categoria || 'Geral', // Normaliza a categoria
-                    id: site.id || site.nome // Garante que o ID exista para CRUD
+                    id: site.id || site.nome, // Garante que o ID exista para CRUD
+                    linkPlanilha: site.linkPlanilha || '',
+                    linkAppsScript: site.linkAppsScript || ''
                 }));
                 
                 showStatus(`✅ ${allSites.length} sites carregados com sucesso!`, 'success');
@@ -790,6 +838,8 @@
             document.getElementById('siteCategoria').value = '';
             document.getElementById('siteExtra1').value = '';
             document.getElementById('siteExtra2').value = '';
+            document.getElementById('siteLinkPlanilha').value = '';
+            document.getElementById('siteLinkAppsScript').value = '';
             modalStatus.innerHTML = '';
 
             if (mode === 'add') {
@@ -801,8 +851,10 @@
                 document.getElementById('siteNome').value = site.nome;
                 document.getElementById('siteUrl').value = site.url;
                 document.getElementById('siteCategoria').value = site.categoria;
-                document.getElementById('siteExtra1').value = site.extra1;
-                document.getElementById('siteExtra2').value = site.extra2;
+                document.getElementById('siteExtra1').value = site.extra1 || '';
+                document.getElementById('siteExtra2').value = site.extra2 || '';
+                document.getElementById('siteLinkPlanilha').value = site.linkPlanilha || '';
+                document.getElementById('siteLinkAppsScript').value = site.linkAppsScript || '';
                 deleteBtn.style.display = 'inline-block';
             }
             
@@ -862,6 +914,8 @@
             const categoria = document.getElementById('siteCategoria').value.trim();
             const extra1 = document.getElementById('siteExtra1').value.trim();
             const extra2 = document.getElementById('siteExtra2').value.trim();
+            const linkPlanilha = document.getElementById('siteLinkPlanilha').value.trim();
+            const linkAppsScript = document.getElementById('siteLinkAppsScript').value.trim();
             const modalStatus = document.getElementById('modalStatus');
             
             if (!nome || !url) {
@@ -875,7 +929,9 @@
                 url,
                 categoria,
                 extra1,
-                extra2
+                extra2,
+                linkPlanilha,
+                linkAppsScript
             };
 
             const acao = id ? 'editar' : 'adicionar';
@@ -1076,6 +1132,19 @@
             if (site.extra1) extraInfo += `<div class="site-extra"><i class="fas fa-thumbtack"></i> ${site.extra1}</div>`;
             if (site.extra2) extraInfo += `<div class="site-extra"><i class="fas fa-tag"></i> ${site.extra2}</div>`;
             
+            // Links adicionais (Planilha e Apps Script)
+            let linksHtml = '';
+            if (site.linkPlanilha || site.linkAppsScript) {
+                linksHtml = '<div class="site-links">';
+                if (site.linkPlanilha) {
+                    linksHtml += `<a href="${site.linkPlanilha}" target="_blank" class="site-link-btn" onclick="event.stopPropagation()"><i class="fas fa-table"></i> Planilha</a>`;
+                }
+                if (site.linkAppsScript) {
+                    linksHtml += `<a href="${site.linkAppsScript}" target="_blank" class="site-link-btn" onclick="event.stopPropagation()"><i class="fas fa-code"></i> Apps Script</a>`;
+                }
+                linksHtml += '</div>';
+            }
+            
             // O modo Lista tem uma estrutura interna diferente para alinhamento
             if (currentView === 'list') {
                  card.innerHTML = `
@@ -1084,6 +1153,7 @@
                     <div class="site-info">
                         <div class="site-name">${site.nome} ${accessBadge}</div>
                         <div class="site-url">${site.url}</div>
+                        ${linksHtml}
                     </div>
                     <span class="site-category">${site.category}</span>
                 `;
@@ -1095,6 +1165,7 @@
                     <div class="site-url">${site.url}</div>
                     <span class="site-category">${site.category}</span>
                     ${extraInfo}
+                    ${linksHtml}
                 `;
             }
 
