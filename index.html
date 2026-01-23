@@ -708,11 +708,21 @@
 
         window.onload = function() {
             initDarkMode();
-            const savedUrl = localStorage.getItem('webAppUrl');
-            if (savedUrl) {
-                document.getElementById('webAppUrl').value = savedUrl;
-                loadSites();
+            
+            // URL permanente do Apps Script
+            const permanentUrl = 'https://script.google.com/macros/s/AKfycbwL0LkBVLQ6ejFiA-gFe2901i2nAHcNbLbIoXTCxgnuAhhuWt8LVs4vQInsAZ4XOwKDCQ/exec';
+            
+            // Verifica se há URL salva, caso contrário usa a permanente
+            const savedUrl = localStorage.getItem('webAppUrl') || permanentUrl;
+            
+            document.getElementById('webAppUrl').value = savedUrl;
+            
+            // Salva a URL permanente no localStorage se não houver nada salvo
+            if (!localStorage.getItem('webAppUrl')) {
+                localStorage.setItem('webAppUrl', permanentUrl);
             }
+            
+            loadSites();
             changeView(currentView);
         };
         
